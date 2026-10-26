@@ -102,4 +102,141 @@ class _CatalogoScreenState extends State<CatalogoScreen> {
     ),
   ];
 
-}
+@override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Pontos Turísticos da Baixada Santista - Sabrina Clemente da Silva'),
+      ),
+      body: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 600),
+          child: ListView.builder(
+            padding: const EdgeInsets.all(16.0),
+            itemCount: _locais.length,
+            itemBuilder: (context, index) {
+              return _construirCartaoTuristico(_locais[index]);
+            },
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _construirCartaoTuristico(PontoTuristico local) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 20.0),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(15.0),
+        boxShadow: const [
+          BoxShadow(
+            color: Colors.black12,
+            blurRadius: 6.0,
+            offset: Offset(0, 3),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ClipRRect(
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(15.0)),
+            child: Image.network(
+              local.imagemUrl,
+              height: 200,
+              width: double.infinity,
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) {
+                return Container(
+                  height: 200,
+                  width: double.infinity,
+                  color: Colors.grey[300],
+                  child: const Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.broken_image, size: 50, color: Colors.grey),
+                      SizedBox(height: 8),
+                      Text('Imagem indisponível', style: TextStyle(color: Colors.grey)),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Nome do Local
+                Text(
+                  local.nome,
+                  style: const TextStyle(
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF0277BD),
+                  ),
+                ),
+                const SizedBox(height: 4.0),
+                // Cidade
+                Row(
+                  children: [
+                    const Icon(Icons.location_on, size: 16, color: Colors.grey),
+                    const SizedBox(width: 4.0),
+                    Text(
+                      local.cidade,
+                      style: const TextStyle(
+                        fontSize: 14.0,
+                        color: Colors.grey,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12.0),
+                // Descrição Curta
+                Text(
+                  local.descricao,
+                  style: const TextStyle(fontSize: 14.0, height: 1.4),
+                ),
+                const SizedBox(height: 16.0),
+                Row(
+                  children: [
+                    Expanded(
+                      child: CheckboxListTile(
+                        contentPadding: EdgeInsets.zero,
+                        controlAffinity: ListTileControlAffinity.leading,
+                        title: const Text('Favorito', style: TextStyle(fontSize: 14)),
+                        value: local.favorito,
+                        activeColor: Colors.amber,
+                        onChanged: (bool? valor) {
+                          setState(() {
+                            local.favorito = valor ?? false;
+                          });
+                        },
+                      ),
+                    ),
+                    Expanded(
+                      child: CheckboxListTile(
+                        contentPadding: EdgeInsets.zero,
+                        controlAffinity: ListTileControlAffinity.leading,
+                        title: const Text('Visitado', style: TextStyle(fontSize: 14)),
+                        value: local.visitado,
+                        activeColor: Colors.green,
+                        onChanged: (bool? valor) {
+                          setState(() {
+                            local.visitado = valor ?? false;
+                          });
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }}
