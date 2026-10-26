@@ -29,3 +29,22 @@ class Principal extends StatelessWidget {
     );
   }
 }
+
+class PontoTuristico {
+  final String nome;
+  final String cidade;
+  final String descricao;
+  final String imagemUrl;
+  bool favorito;
+  bool visitado;
+
+  PontoTuristico({
+    required this.nome,
+    required this.cidade,
+    required this.descricao,
+    required this.imagemUrl,
+    this.favorito = false,
+    this.visitado = false,
+  });
+}
+
